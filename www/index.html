@@ -1,0 +1,65 @@
+<!DOCTYPE>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="./js/analytics.js"></script>
+
+  <!-- codemirror -->
+  <script src="./codemirror/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
+  <script src="./codemirror/mode/javascript/javascript.js"></script>
+  <script src="./codemirror/mode/markdown/markdown.js"></script>
+
+  <!-- babylon -->
+  <script>
+    window.exports = {};
+  </script>
+  <script src="./babylon/lib/index.js"></script>
+
+  <!-- esdoc -->
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="input-pane">
+    <ul class="tab-buttons">
+      <li class="action-button positive-button" id="tryButton">Build</li>
+      <li data-target="tab-source">Source Code</li>
+      <li data-target="tab-test">Test Code</li>
+      <li data-target="tab-manual">Manual</li>
+    </ul>
+
+    <div class="tab-container">
+      <div id="tab-source" style="z-index: 100">
+        <label for="source">Write a source code for documentation</label>
+        <textarea id="source"></textarea>
+      </div>
+
+      <div id="tab-test" style="z-index: 0">
+        <label for="test">Write a test code for integration into documentation</label>
+        <textarea id="test"></textarea>
+      </div>
+
+      <div id="tab-manual" style="z-index: 0">
+        <label for="manual">Write a manual for integration into documentation</label>
+        <textarea id="manual"></textarea>
+      </div>
+    </div>
+
+    <code class="error-message" id="inputErrorMessage" style="display: none;"></code>
+  </div>
+
+  <div class="output-area">
+    this is output area
+    <code class="error-message" id="outputErrorMessage" style="display: none;"></code>
+  </div>
+
+</div>
+
+
+<script src="./js/index.js"></script>
+<script src="./js/ESDoc.js"></script>
+</body>
+</html>
