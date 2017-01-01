@@ -34,6 +34,17 @@ for (const tabButton of Array.from(tabButtons)) {
 const tryEl = document.querySelector('#tryButton');
 const inputErrorMessageEl = document.querySelector('#inputErrorMessage');
 const outputErrorMessageEl = document.querySelector('#outputErrorMessage');
+
+function showInputError(message) {
+  inputErrorMessageEl.style.display = null;
+  inputErrorMessageEl.textContent = message;
+}
+
+function showOutputError(message) {
+  outputErrorMessageEl.style.display = null;
+  outputErrorMessageEl.textContent = message;
+}
+
 tryEl.addEventListener('click', ()=>{
   const sourceCode = sourceCodeCM.getValue();
   const testCode = testCodeCM.getValue();
@@ -46,8 +57,7 @@ tryEl.addEventListener('click', ()=>{
   {
     const [error, errorMessage] = checkSyntax(sourceCode);
     if (error) {
-      inputErrorMessageEl.style.display = null;
-      inputErrorMessageEl.textContent = errorMessage;
+      showInputError(errorMessage);
       return;
     }
   }
@@ -56,8 +66,7 @@ tryEl.addEventListener('click', ()=>{
   {
     const [error, errorMessage] = checkSyntax(testCode);
     if (error) {
-      inputErrorMessageEl.style.display = null;
-      inputErrorMessageEl.textContent = errorMessage;
+      showInputError(errorMessage);
       return;
     }
   }
@@ -65,18 +74,35 @@ tryEl.addEventListener('click', ()=>{
   // generate
   window.ESDoc.post(sourceCode, testCode, manual, (error, res)=>{
     if (error) {
-      outputErrorMessageEl.style.display = null;
-      outputErrorMessageEl.textContent = res;
+      showOutputError(res);
+      return;
+    }
+
+    let destURL;
+    try {
+      destURL = JSON.parse(res).path;
+    } catch (e) {
+      showOutputError(e.message);
       return;
     }
 
     // polling
     const outputPath = JSON.parse(res).path;
-    window.ESDoc.polling(outputPath + '/.finish.json', 10000, (error)=>{
+    window.ESDoc.polling(outputPath + '/.finish.json', 10000, (error, resText)=>{
       if (error) {
-        console.log(error);
-      } else {
-        console.log('finish');
+        showOutputError(error.message);
+        return;
+      }
+
+      try {
+        const res = JSON.parse(resText);
+        if (res.success) {
+          console.log(destURL);
+        } else {
+          showOutputError(res.message);
+        }
+      } catch (e) {
+        showOutputError(e.message);
       }
     });
   });

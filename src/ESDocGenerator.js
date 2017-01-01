@@ -122,7 +122,7 @@ class ESDocGenerator {
   _writeManualCode(esdocConfig, manualCode) {
     if (!manualCode) return;
 
-    const filePath = `${esdocConfig.manual.usage[0]}/usage.md`;
+    const filePath = esdocConfig.manual.usage[0];
     fs.outputFileSync(filePath, manualCode);
 
     fs.ensureFileSync(esdocConfig.manual.index);
