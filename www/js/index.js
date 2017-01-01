@@ -1,10 +1,35 @@
 const sessionId = Date.now() + '_' + Math.random().toString().replace('0.', '');
 
+function restoreData() {
+  const result = {};
+  if (!location.hash) return result;
+
+  const rawData = location.hash.replace(/^#/, '');
+  const items = rawData.split('&');
+  for (const kv of items) {
+    const [key, value] = kv.split('=');
+    result[key] = decodeURIComponent(value);
+  }
+
+  return result;
+}
+
+function saveData(data) {
+  const temp = [];
+  for (const key in data) {
+    temp.push(key + '=' + encodeURIComponent(data[key]));
+  }
+
+  location.hash = temp.join('&');
+}
+
+const savedData = restoreData();
+
 // init code mirror
 const indexTX = document.querySelector('#index');
 const indexCM = CodeMirror(function(elt) {
   indexTX.parentNode.replaceChild(elt, indexTX);
-}, {mode: 'markdown', lineNumbers: true, value: indexTX.value});
+}, {mode: 'markdown', lineNumbers: true, value: savedData.indexCode || indexTX.value});
 
 const sourceCodeTX = document.querySelector('#source');
 const sourceCodeCM = CodeMirror(function(elt) {
@@ -106,6 +131,8 @@ tryEl.addEventListener('click', ()=>{
       return;
     }
   }
+
+  saveData({indexCode, sourceCode, testCode, manualCode, configCode});
 
   // generate
   window.ESDoc.post({indexCode, sourceCode, testCode, manualCode, configCode, sessionId}, (error, res)=>{

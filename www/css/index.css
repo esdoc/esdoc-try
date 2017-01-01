@@ -87,6 +87,17 @@ iframe {
   text-align: center;
 }
 
+.logo {
+  vertical-align: top;
+  position: relative;
+  top: 4px;
+  margin-right: 0.5em !important;
+}
+
+.logo img {
+  width: 32px;
+}
+
 .CodeMirror {
   height: 100%;
   font-family: Menlo, Consolas, 'Courier New', Courier, Monaco, monospace;
