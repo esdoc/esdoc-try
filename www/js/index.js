@@ -39,7 +39,7 @@ const sourceCodeCM = CodeMirror(function(elt) {
 const testCodeTX = document.querySelector('#test');
 const testCodeCM = CodeMirror(function(elt) {
   testCodeTX.parentNode.replaceChild(elt, testCodeTX);
-}, {mode: 'javascript', lineNumbers: true, value: saveData.testCode || testCodeTX.value});
+}, {mode: 'javascript', lineNumbers: true, value: savedData.testCode || testCodeTX.value});
 
 const manualTX = document.querySelector('#manual');
 const manualCM = CodeMirror(function(elt) {
