@@ -1,6 +1,11 @@
 const sessionId = Date.now() + '_' + Math.random().toString().replace('0.', '');
 
 // init code mirror
+const indexTX = document.querySelector('#index');
+const indexCM = CodeMirror(function(elt) {
+  indexTX.parentNode.replaceChild(elt, indexTX);
+}, {mode: 'markdown', lineNumbers: true, value: indexTX.value});
+
 const sourceCodeTX = document.querySelector('#source');
 const sourceCodeCM = CodeMirror(function(elt) {
   sourceCodeTX.parentNode.replaceChild(elt, sourceCodeTX);
@@ -15,6 +20,11 @@ const manualTX = document.querySelector('#manual');
 const manualCM = CodeMirror(function(elt) {
   manualTX.parentNode.replaceChild(elt, manualTX);
 }, {mode: 'markdown', lineNumbers: true, value:manualTX.value});
+
+const configTX = document.querySelector('#config');
+const configCM = CodeMirror(function(elt) {
+  configTX.parentNode.replaceChild(elt, configTX);
+}, {mode: 'javascript', lineNumbers: true, value: configTX.value});
 
 // handle tab buttons
 const tabs = document.querySelectorAll('.tab-container > div');
@@ -51,9 +61,11 @@ function showOutputError(message) {
 }
 
 tryEl.addEventListener('click', ()=>{
+  const indexCode = indexCM.getValue();
   const sourceCode = sourceCodeCM.getValue();
   const testCode = testCodeCM.getValue();
-  const manual = manualCM.getValue();
+  const manualCode = manualCM.getValue();
+  const configCode = configCM.getValue();
 
   outputPaneEl.classList.add('loading');
   viewerEl.removeAttribute('src');
@@ -63,7 +75,7 @@ tryEl.addEventListener('click', ()=>{
 
   // check syntax: source code
   {
-    const [error, errorMessage] = checkSyntax(sourceCode);
+    const [error, errorMessage] = checkJSSyntax(sourceCode);
     if (error) {
       showInputError(errorMessage);
       return;
@@ -72,7 +84,16 @@ tryEl.addEventListener('click', ()=>{
 
   // check syntax: test code
   {
-    const [error, errorMessage] = checkSyntax(testCode);
+    const [error, errorMessage] = checkJSSyntax(testCode);
+    if (error) {
+      showInputError(errorMessage);
+      return;
+    }
+  }
+
+  // check syntax: config code
+  {
+    const [error, errorMessage] = checkJSONSyntax(configCode);
     if (error) {
       showInputError(errorMessage);
       return;
@@ -80,7 +101,7 @@ tryEl.addEventListener('click', ()=>{
   }
 
   // generate
-  window.ESDoc.post({sourceCode, testCode, manual, sessionId}, (error, res)=>{
+  window.ESDoc.post({indexCode, sourceCode, testCode, manualCode, configCode, sessionId}, (error, res)=>{
     if (error) {
       showOutputError(res);
       return;
@@ -118,7 +139,7 @@ tryEl.addEventListener('click', ()=>{
 });
 
 // check syntax of codes
-function checkSyntax(code) {
+function checkJSSyntax(code) {
   const babylon = window.exports.parse;
   const option = {
     sourceType: 'module',
@@ -143,19 +164,54 @@ function checkSyntax(code) {
   } catch (e) {
     const lineNumber = e.loc.line - 1;
     const columnNumber = e.loc.column;
-    const codeLines = code.split('\n');
-    const errorMessages = [e.message];
-    for (let i = lineNumber, counter = 0; counter < 5 && i < codeLines.length; i++, counter++) {
-      const l = (i + 1) < 10 ? ` ${i + 1}` : `${i + 1}`;
-      if (counter === 0) {
-        errorMessages.push(`> ${l} | ${codeLines[i]}`);
-        errorMessages.push('       ' + ' '.repeat(columnNumber) + '^');
-      } else {
-        errorMessages.push(`  ${l} | ${codeLines[i]}`);
-      }
-    }
-    return [e, errorMessages.join('\n')];
+    const errorMessage = `${e.message}\n${buildErrorMessage(code, lineNumber, columnNumber)}`;
+    return [e, errorMessage];
   }
+}
+
+function checkJSONSyntax(code) {
+  try {
+    JSON.parse(code);
+    return [null, null];
+  } catch(e) {
+    const matched = e.message.match(/position (\d+)$/);
+    if (!matched) return [e, e.message];
+
+    const pos = parseInt(matched[1], 10) + 1;
+    const codeLines = code.split('\n');
+    let counter = 0;
+    let lineNumber = 0;
+    let columnNumber = 0;
+    for (const codeLine of codeLines) {
+      counter += codeLine.length + 1;
+      if (pos <= counter) {
+        const rightLength = counter - pos;
+        columnNumber = codeLine.length - rightLength;
+        break;
+      }
+      lineNumber++;
+    }
+
+    const errorMessage = `${e.message}\n${buildErrorMessage(code, lineNumber, columnNumber)}`;
+    return [e, errorMessage];
+  }
+}
+
+function buildErrorMessage(code, lineNumber, columnNumber) {
+  const codeLines = code.split('\n');
+  const errorMessages = [];
+  const start = Math.max(lineNumber - 2, 0);
+  for (let i = start, counter = 0; counter < 6 && i < codeLines.length; i++, counter++) {
+    const l = (i + 1) < 10 ? ` ${i + 1}` : `${i + 1}`;
+    if (i === lineNumber) {
+      errorMessages.push(`> ${l} | ${codeLines[i]}`);
+      errorMessages.push('       ' + ' '.repeat(columnNumber) + '^');
+    } else {
+      errorMessages.push(`  ${l} | ${codeLines[i]}`);
+    }
+  }
+
+  return errorMessages.join('\n');
 }
 
 // handle resizer

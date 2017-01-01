@@ -26,12 +26,18 @@
   <div class="input-pane" id="inputPane">
     <ul class="tab-buttons">
       <li class="action-button positive-button" id="tryButton">Try it out</li>
+      <li data-target="tab-index">Index</li>
       <li data-target="tab-source">Source Code</li>
       <li data-target="tab-test">Test Code</li>
-      <li data-target="tab-manual">Manual</li>
+      <li data-target="tab-manual">Manual(Usage)</li>
+      <li data-target="tab-config">Config</li>
     </ul>
 
     <div class="tab-container">
+      <div id="tab-index" style="z-index: 0;">
+        <textarea id="index">aaa</textarea>
+      </div>
+
       <div id="tab-source" style="z-index: 100">
 <textarea id="source">/**
  * this is MyClass.
@@ -92,6 +98,34 @@ const myClass = new MyClass(100);
 const hello = myClass.method(1, 2);
 console.log(hello);
 ```</textarea>
+      </div>
+
+      <div id="tab-config" style="z-index: 0;">
+        <textarea id="config">{
+  "source": "__SOURCE__",
+  "destination": "__DESTINATION__",
+  "access": ["public", "protected", "private"],
+  "unexportIdentifier": true,
+  "undocumentIdentifier": true,
+  "index": "__INDEX__",
+  "experimentalProposal": {
+    "classProperties": true,
+    "objectRestSpread": true,
+    "decorators": true,
+    "doExpressions": true,
+    "functionBind": true,
+    "asyncGenerators": true,
+    "exportExtensions": true,
+    "dynamicImport": true
+  },
+  "test": {
+    "type": "mocha",
+    "source": "__TEST__",
+  },
+  "manual": {
+    "usage": ["__MANUAL__"]
+  }
+}</textarea>
       </div>
     </div>
 

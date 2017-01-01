@@ -17,9 +17,11 @@ class API {
 
   create(req, res) {
     const sessionId = req.body.sessionId;
+    const indexCode = req.body.indexCode;
     const sourceCode = req.body.sourceCode;
     const testCode = req.body.testCode;
-    const manualCode = req.body.manual;
+    const manualCode = req.body.manualCode;
+    const configCode = req.body.configCode;
 
     // check processing count.
     if (processing.length >= MaxProcess) {
@@ -30,7 +32,7 @@ class API {
 
     processing.push(sourceCode);
 
-    const generator = new ESDocGenerator({sourceCode, testCode, manualCode, sessionId}, this._destinationDirPath);
+    const generator = new ESDocGenerator({indexCode, sourceCode, testCode, manualCode, configCode, sessionId}, this._destinationDirPath);
     fs.removeSync(generator.outDirFullPath);
 
     const promise = co(function*(){

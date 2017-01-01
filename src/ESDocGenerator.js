@@ -6,10 +6,12 @@ const moment = require('moment');
 const Logger = require('./Util/Logger.js');
 
 class ESDocGenerator {
-  constructor({sourceCode, testCode, manualCode, sessionId}, destinationDirPath) {
+  constructor({indexCode, sourceCode, testCode, manualCode, configCode, sessionId}, destinationDirPath) {
+    this._indexCode = indexCode;
     this._sourceCode = sourceCode;
     this._testCode = testCode;
     this._manualCode = manualCode;
+    this._configCode = configCode;
     this._destinationDirPath = path.resolve(destinationDirPath);
     this._inputDirPath = `${sessionId}/source`;
     this._outputDirPath = `${sessionId}/out`;
@@ -27,7 +29,7 @@ class ESDocGenerator {
     const inputDirPath = `${this._destinationDirPath}/${this._inputDirPath}`;
     const outputDirPath = `${this._destinationDirPath}/${this._outputDirPath}`;
     const esdocConfigPath = `${inputDirPath}/esdoc.json`;
-    const esdocConfig = this._buildESDocConfig(inputDirPath, outputDirPath);
+    const esdocConfig = this._buildESDocConfig(inputDirPath, outputDirPath, this._configCode);
 
     // clean up
     fs.removeSync(inputDirPath);
@@ -35,6 +37,7 @@ class ESDocGenerator {
 
     // write files
     this._writeESDocConfig(esdocConfigPath, esdocConfig);
+    this._writeIndexCode(esdocConfig, this._indexCode);
     this._writeSourceCode(esdocConfig, this._sourceCode);
     this._writeTestCode(esdocConfig, this._testCode);
     this._writeManualCode(esdocConfig, this._manualCode);
@@ -56,57 +59,51 @@ class ESDocGenerator {
     });
   }
 
-  _buildESDocConfig(inputDirPath, outputDirPath) {
+  _buildESDocConfig(inputDirPath, outputDirPath, userConfigCode) {
     const sourceDirPath = `${inputDirPath}/src`;
     const testDirPath = `${inputDirPath}/test`;
     const manualDirPath = `${inputDirPath}/manual`;
 
-    const esdocConfig = {
-      source: sourceDirPath,
-      destination: outputDirPath,
-      access: ['public', 'protected', 'private'],
-      unexportIdentifier: true,
-      undocumentIdentifier: true,
-      index: `${inputDirPath}/README.md`,
-      package: null,
-      experimentalProposal: {
-        classProperties: true,
-        objectRestSpread: true,
-        decorators: true,
-        doExpressions: true,
-        functionBind: true,
-        asyncGenerators: true,
-        exportExtensions: true,
-        dynamicImport: true
-      }
-    };
+    let userConfig = {};
+    try {
+      userConfig = JSON.parse(userConfigCode);
+    } catch(e) {
+      // do nothing
+    }
+
+    userConfig.source = sourceDirPath;
+    userConfig.destination = outputDirPath;
+    userConfig.index = `${inputDirPath}/README.md`;
+    userConfig.package = null;
 
     if (this._testCode) {
-      esdocConfig.test = {
+     userConfig.test = {
         type: 'mocha',
         source: testDirPath,
       }
     }
 
     if (this._manualCode) {
-      esdocConfig.manual = {
-        index: `${manualDirPath}/index.md`,
+      userConfig.manual = {
+        // index: `${manualDirPath}/index.md`,
         usage: [`${manualDirPath}/usage.md`]
       }
     }
 
-    return esdocConfig;
+    return userConfig;
   }
 
   _writeESDocConfig(configPath, esdocConfig) {
     fs.outputFileSync(configPath, JSON.stringify(esdocConfig, null, 2));
   }
 
+  _writeIndexCode(esdocConfig, indexCode) {
+    fs.outputFileSync(esdocConfig.index, indexCode);
+  }
+
   _writeSourceCode(esdocConfig, sourceCode) {
     const filePath = `${esdocConfig.source}/index.js`;
     fs.outputFileSync(filePath, sourceCode);
-
-    fs.copySync('./src/template/README.md', esdocConfig.index);
   }
 
   _writeTestCode(esdocConfig, testCode) {
@@ -122,8 +119,8 @@ class ESDocGenerator {
     const filePath = esdocConfig.manual.usage[0];
     fs.outputFileSync(filePath, manualCode);
 
-    fs.ensureFileSync(esdocConfig.manual.index);
-    fs.copySync('./src/template/MANUAL_INDEX.md', esdocConfig.manual.index);
+    // fs.ensureFileSync(esdocConfig.manual.index);
+    // fs.copySync('./src/template/MANUAL_INDEX.md', esdocConfig.manual.index);
   }
 }
 
