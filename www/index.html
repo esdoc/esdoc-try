@@ -33,18 +33,65 @@
 
     <div class="tab-container">
       <div id="tab-source" style="z-index: 100">
-        <label for="source">Write a source code for documentation</label>
-        <textarea id="source"></textarea>
+<textarea id="source">/**
+ * this is MyClass.
+ */
+export default class MyClass {
+  /**
+   * creates a instance of MyClass.
+   * @param {number} value - initial value.
+   */
+  constructor(value){
+    /**
+     * this is property of MyClass.
+     * @type {number}
+     * @private
+     */
+    this._property = value;
+  }
+
+  /**
+   * this is method of MyClass.
+   * @param {number} a - this is a 1st number value.
+   * @param {number} b - this is a 2nd number value.
+   * @returns {string} repeated Hello
+   */
+  method(a, b){
+    return 'Hello'.repeat((a + b) * this._property);
+  }
+}</textarea>
       </div>
 
       <div id="tab-test" style="z-index: 0">
-        <label for="test">Write a test code for integration into documentation</label>
-        <textarea id="test"></textarea>
+        <textarea id="test">/**
+ * this is test for MyClass.
+ * @test {MyClass}
+ */
+describe('test MyClass', ()=>{
+  /**
+   * this is test for MyClass#method.
+   * @test {MyClass#method}
+   */
+  it('has a method', ()=>{
+    assert(new MyClass(100).method);
+  });
+});</textarea>
       </div>
 
       <div id="tab-manual" style="z-index: 0">
-        <label for="manual">Write a manual for integration into documentation</label>
-        <textarea id="manual"></textarea>
+        <textarea id="manual"># Usage
+
+This is usage for MyModule that is written by GitHub Flavored Markdown.
+
+- this is list item1
+- this is list item2
+- this is list item3
+
+```js
+const myClass = new MyClass(100);
+const hello = myClass.method(1, 2);
+console.log(hello);
+```</textarea>
       </div>
     </div>
 

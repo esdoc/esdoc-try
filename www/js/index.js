@@ -1,20 +1,20 @@
 const sessionId = Date.now() + '_' + Math.random().toString().replace('0.', '');
 
 // init code mirror
+const sourceCodeTX = document.querySelector('#source');
 const sourceCodeCM = CodeMirror(function(elt) {
-  const textarea = document.querySelector('#source');
-  textarea.parentNode.replaceChild(elt, textarea);
-}, {mode: 'javascript', lineNumbers: true, value: 'export default class Foo{}'});
+  sourceCodeTX.parentNode.replaceChild(elt, sourceCodeTX);
+}, {mode: 'javascript', lineNumbers: true, value: sourceCodeTX.value});
 
+const testCodeTX = document.querySelector('#test');
 const testCodeCM = CodeMirror(function(elt) {
-  const textarea = document.querySelector('#test');
-  textarea.parentNode.replaceChild(elt, textarea);
-}, {mode: 'javascript', lineNumbers: true, value: 'describe("foo", ()=>{})'});
+  testCodeTX.parentNode.replaceChild(elt, testCodeTX);
+}, {mode: 'javascript', lineNumbers: true, value: testCodeTX.value});
 
+const manualTX = document.querySelector('#manual');
 const manualCM = CodeMirror(function(elt) {
-  const textarea = document.querySelector('#manual');
-  textarea.parentNode.replaceChild(elt, textarea);
-}, {mode: 'markdown', lineNumbers: true, value: '# Foo'});
+  manualTX.parentNode.replaceChild(elt, manualTX);
+}, {mode: 'markdown', lineNumbers: true, value:manualTX.value});
 
 // handle tab buttons
 const tabs = document.querySelectorAll('.tab-container > div');
