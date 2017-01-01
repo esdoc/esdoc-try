@@ -2,3 +2,4 @@ node_modules
 log/*.log
 www/babylon
 www/codemirror
+www/out

@@ -2,6 +2,7 @@ const Process = require('./Util/Process.js');
 const fs = require('fs-extra');
 const path = require('path');
 const co = require('co');
+const moment = require('moment');
 const Logger = require('./Util/Logger.js');
 
 class ESDocGenerator {
@@ -101,12 +102,12 @@ class ESDocGenerator {
   }
 
   _writeESDocConfig(configPath, esdocConfig) {
-    fs.writeFileSync(configPath, JSON.stringify(esdocConfig, null, 2));
+    fs.outputFileSync(configPath, JSON.stringify(esdocConfig, null, 2));
   }
 
   _writeSourceCode(esdocConfig, sourceCode) {
     const filePath = `${esdocConfig.source}/index.js`;
-    fs.writeFileSync(filePath, sourceCode);
+    fs.outputFileSync(filePath, sourceCode);
 
     fs.copySync('./src/template/README.md', esdocConfig.index);
   }
@@ -115,15 +116,16 @@ class ESDocGenerator {
     if (!testCode) return;
 
     const filePath = `${esdocConfig.test.source}/indexTest.js`;
-    fs.writeFileSync(filePath, testCode);
+    fs.outputFileSync(filePath, testCode);
   }
 
   _writeManualCode(esdocConfig, manualCode) {
     if (!manualCode) return;
 
-    const filePath = `${esdocConfig.manual.source}/indexTest.js`;
-    fs.writeFileSync(filePath, manualCode);
+    const filePath = `${esdocConfig.manual.usage[0]}/usage.md`;
+    fs.outputFileSync(filePath, manualCode);
 
+    fs.ensureFileSync(esdocConfig.manual.index);
     fs.copySync('./src/template/MANUAL_INDEX.md', esdocConfig.manual.index);
   }
 }

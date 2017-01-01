@@ -10,6 +10,9 @@
     "url": "https://github.com/esdoc/esdoc-try"
   },
   "scripts": {
+    "start": "NODE_PATH=$(npm prefix -g)/lib/node_modules node ./src/App.js",
+    "forever": "NODE_PATH=$(npm prefix -g)/lib/node_modules forever start ./src/App.js",
+    "install-tool": "bash ./script/install-tool.sh"
   },
   "dependencies": {
     "codemirror": "5.22.0",
