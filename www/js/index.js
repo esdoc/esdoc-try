@@ -34,22 +34,22 @@ const indexCM = CodeMirror(function(elt) {
 const sourceCodeTX = document.querySelector('#source');
 const sourceCodeCM = CodeMirror(function(elt) {
   sourceCodeTX.parentNode.replaceChild(elt, sourceCodeTX);
-}, {mode: 'javascript', lineNumbers: true, value: sourceCodeTX.value});
+}, {mode: 'javascript', lineNumbers: true, value: savedData.sourceCode || sourceCodeTX.value});
 
 const testCodeTX = document.querySelector('#test');
 const testCodeCM = CodeMirror(function(elt) {
   testCodeTX.parentNode.replaceChild(elt, testCodeTX);
-}, {mode: 'javascript', lineNumbers: true, value: testCodeTX.value});
+}, {mode: 'javascript', lineNumbers: true, value: saveData.testCode || testCodeTX.value});
 
 const manualTX = document.querySelector('#manual');
 const manualCM = CodeMirror(function(elt) {
   manualTX.parentNode.replaceChild(elt, manualTX);
-}, {mode: 'markdown', lineNumbers: true, value:manualTX.value});
+}, {mode: 'markdown', lineNumbers: true, value: savedData.manualCode || manualTX.value});
 
 const configTX = document.querySelector('#config');
 const configCM = CodeMirror(function(elt) {
   configTX.parentNode.replaceChild(elt, configTX);
-}, {mode: 'javascript', lineNumbers: true, value: configTX.value});
+}, {mode: 'javascript', lineNumbers: true, value: savedData.configCode || configTX.value});
 
 // handle tab buttons
 const tabs = document.querySelectorAll('.tab-container > div');
