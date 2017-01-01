@@ -1,3 +1,5 @@
+const sessionId = Date.now() + '_' + Math.random().toString().replace('0.', '');
+
 // init code mirror
 const sourceCodeCM = CodeMirror(function(elt) {
   const textarea = document.querySelector('#source');
@@ -34,6 +36,9 @@ for (const tabButton of Array.from(tabButtons)) {
 const tryEl = document.querySelector('#tryButton');
 const inputErrorMessageEl = document.querySelector('#inputErrorMessage');
 const outputErrorMessageEl = document.querySelector('#outputErrorMessage');
+const inputPaneEl = document.querySelector('#inputPane');
+const outputPaneEl = document.querySelector('#outputPane');
+const viewerEl = document.querySelector('#viewer');
 
 function showInputError(message) {
   inputErrorMessageEl.style.display = null;
@@ -49,6 +54,9 @@ tryEl.addEventListener('click', ()=>{
   const sourceCode = sourceCodeCM.getValue();
   const testCode = testCodeCM.getValue();
   const manual = manualCM.getValue();
+
+  outputPaneEl.classList.add('loading');
+  viewerEl.removeAttribute('src');
 
   inputErrorMessageEl.style.display = 'none';
   outputErrorMessageEl.style.display = 'none';
@@ -72,7 +80,7 @@ tryEl.addEventListener('click', ()=>{
   }
 
   // generate
-  window.ESDoc.post(sourceCode, testCode, manual, (error, res)=>{
+  window.ESDoc.post({sourceCode, testCode, manual, sessionId}, (error, res)=>{
     if (error) {
       showOutputError(res);
       return;
@@ -97,7 +105,8 @@ tryEl.addEventListener('click', ()=>{
       try {
         const res = JSON.parse(resText);
         if (res.success) {
-          console.log(destURL);
+          viewerEl.src = destURL;
+          outputPaneEl.classList.remove('loading');
         } else {
           showOutputError(res.message);
         }
@@ -149,5 +158,13 @@ function checkSyntax(code) {
   }
 }
 
-function post(sourceCode, testCode, manual) {
-}
+// handle resizer
+document.querySelector('.resizer').addEventListener('click', (ev)=>{
+  if (inputPaneEl.style.display) {
+    inputPaneEl.style.display = null;
+    ev.target.textContent = '< >';
+  } else {
+    inputPaneEl.style.display = 'none';
+    ev.target.textContent = '> <';
+  }
+});

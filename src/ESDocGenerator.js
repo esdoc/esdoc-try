@@ -6,16 +6,13 @@ const moment = require('moment');
 const Logger = require('./Util/Logger.js');
 
 class ESDocGenerator {
-  constructor({sourceCode, testCode, manualCode}, destinationDirPath) {
+  constructor({sourceCode, testCode, manualCode, sessionId}, destinationDirPath) {
     this._sourceCode = sourceCode;
     this._testCode = testCode;
     this._manualCode = manualCode;
     this._destinationDirPath = path.resolve(destinationDirPath);
-
-    const date = moment.utc().format('YYYY_MM_DD_HH_mm_ss');
-    const random = Math.floor(Math.random() * 10000);
-    this._inputDirPath = `${date}_${random}/source`;
-    this._outputDirPath = `${date}_${random}/out`;
+    this._inputDirPath = `${sessionId}/source`;
+    this._outputDirPath = `${sessionId}/out`;
   }
 
   get outDirPath() {

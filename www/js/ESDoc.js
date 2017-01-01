@@ -1,7 +1,6 @@
 var ESDoc = {
-  post: function(sourceCode, testCode, manual, callback) {
+  post: function(data, callback) {
     const path = '/api/create';
-    const data = {sourceCode, testCode, manual};
     const xhr = new XMLHttpRequest();
 
     xhr.open('POST', path);

@@ -16,20 +16,21 @@ class API {
   }
 
   create(req, res) {
+    const sessionId = req.body.sessionId;
     const sourceCode = req.body.sourceCode;
     const testCode = req.body.testCode;
     const manualCode = req.body.manual;
 
     // check processing count.
     if (processing.length >= MaxProcess) {
-      Logger.e(`processing is max. ${gitUrl}`);
+      Logger.e(`processing is max.`);
       res.json({success: false, message: 'System is busy. Please try after a little.'});
       return;
     }
 
     processing.push(sourceCode);
 
-    const generator = new ESDocGenerator({sourceCode, testCode, manualCode}, this._destinationDirPath);
+    const generator = new ESDocGenerator({sourceCode, testCode, manualCode, sessionId}, this._destinationDirPath);
     fs.removeSync(generator.outDirFullPath);
 
     const promise = co(function*(){

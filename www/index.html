@@ -23,9 +23,9 @@
 
 <div class="container">
 
-  <div class="input-pane">
+  <div class="input-pane" id="inputPane">
     <ul class="tab-buttons">
-      <li class="action-button positive-button" id="tryButton">Build</li>
+      <li class="action-button positive-button" id="tryButton">Try it out</li>
       <li data-target="tab-source">Source Code</li>
       <li data-target="tab-test">Test Code</li>
       <li data-target="tab-manual">Manual</li>
@@ -51,11 +51,12 @@
     <code class="error-message" id="inputErrorMessage" style="display: none;"></code>
   </div>
 
-  <div class="output-area">
-    this is output area
+  <div class="output-pane" id="outputPane">
+    <iframe id="viewer"></iframe>
     <code class="error-message" id="outputErrorMessage" style="display: none;"></code>
   </div>
 
+  <div class="resizer" title="full size">&lt; &gt;</div>
 </div>
 
 
