@@ -1,3 +1,4 @@
+- `cd /var/; ln -s esdoc-try/www ./www-try`
 - start nginx (esdoc-hosting)
 - `npm run forever`
   - or `npm run start`
