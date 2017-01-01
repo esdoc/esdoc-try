@@ -117,6 +117,7 @@ tryEl.addEventListener('click', ()=>{
     let destURL;
     try {
       destURL = JSON.parse(res).path;
+      destURL = `${location.protocol}//${location.host}/${destURL}/index.html`;
     } catch (e) {
       showOutputError(e.message);
       return;
