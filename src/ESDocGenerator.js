@@ -37,6 +37,7 @@ class ESDocGenerator {
 
     // write files
     this._writeESDocConfig(esdocConfigPath, esdocConfig);
+    this._writePackageJSON(esdocConfig);
     this._writeIndexCode(esdocConfig, this._indexCode);
     this._writeSourceCode(esdocConfig, this._sourceCode);
     this._writeTestCode(esdocConfig, this._testCode);
@@ -74,7 +75,7 @@ class ESDocGenerator {
     userConfig.source = sourceDirPath;
     userConfig.destination = outputDirPath;
     userConfig.index = `${inputDirPath}/README.md`;
-    userConfig.package = null;
+    userConfig.package = `${inputDirPath}/package.json`;
 
     if (this._testCode) {
      userConfig.test = {
@@ -95,6 +96,10 @@ class ESDocGenerator {
 
   _writeESDocConfig(configPath, esdocConfig) {
     fs.outputFileSync(configPath, JSON.stringify(esdocConfig, null, 2));
+  }
+
+  _writePackageJSON(esdocConfig) {
+    fs.copySync('./src/template/package.json', esdocConfig.package);
   }
 
   _writeIndexCode(esdocConfig, indexCode) {

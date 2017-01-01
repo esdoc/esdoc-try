@@ -1,0 +1,12 @@
+{
+  "name": "esdoc-try",
+  "version": "0.0.0",
+  "description": "Try ESDoc",
+  "author": "h13i32maru",
+  "homepage": "https://try.esdoc.org/",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esdoc/esdoc-try"
+  }
+}

@@ -26,7 +26,7 @@
   <div class="input-pane" id="inputPane">
     <ul class="tab-buttons">
       <li class="action-button positive-button" id="tryButton">Try it out</li>
-      <li data-target="tab-index">Index</li>
+      <li data-target="tab-index" class="active">Index</li>
       <li data-target="tab-source">Source Code</li>
       <li data-target="tab-test">Test Code</li>
       <li data-target="tab-manual">Manual(Usage)</li>
@@ -34,15 +34,39 @@
     </ul>
 
     <div class="tab-container">
-      <div id="tab-index" style="z-index: 0;">
-        <textarea id="index">aaa</textarea>
+      <div id="tab-index" style="z-index: 100;">
+<textarea id="index">
+# Welcome to ESDoc
+
+This is the place to try ESDoc. Please write a code and click `Try it out`!
+
+- `Index` (this) is used as a index page(Markdown).
+- `Source Code` is used as a source code(JavaScript)
+- `Test Code` is used as a test code(JavaScript).
+- `Manual(Usage)` is used as a manual of usage(Markdown).
+- `Config` is used as a configuration(JSON).
+</textarea>
       </div>
 
-      <div id="tab-source" style="z-index: 100">
-<textarea id="source">/**
+      <div id="tab-source" style="z-index: 0">
+<textarea id="source">
+/**
+ * this is BaseClass.
+ */
+export class BaseClass {
+  /**
+   * this is a method of BaseClass.
+   * @returns {string} a greeting.
+   */
+  baseMethod(){
+    return 'this is base method';
+  }
+}
+
+/**
  * this is MyClass.
  */
-export default class MyClass {
+export default class MyClass extends BaseClass {
   /**
    * creates a instance of MyClass.
    * @param {number} value - initial value.
@@ -65,11 +89,13 @@ export default class MyClass {
   method(a, b){
     return 'Hello'.repeat((a + b) * this._property);
   }
-}</textarea>
+}
+</textarea>
       </div>
 
       <div id="tab-test" style="z-index: 0">
-        <textarea id="test">/**
+<textarea id="test">
+/**
  * this is test for MyClass.
  * @test {MyClass}
  */
@@ -81,11 +107,13 @@ describe('test MyClass', ()=>{
   it('has a method', ()=>{
     assert(new MyClass(100).method);
   });
-});</textarea>
+});
+</textarea>
       </div>
 
       <div id="tab-manual" style="z-index: 0">
-        <textarea id="manual"># Usage
+<textarea id="manual">
+# Usage
 
 This is usage for MyModule that is written by GitHub Flavored Markdown.
 
@@ -97,11 +125,13 @@ This is usage for MyModule that is written by GitHub Flavored Markdown.
 const myClass = new MyClass(100);
 const hello = myClass.method(1, 2);
 console.log(hello);
-```</textarea>
+```
+</textarea>
       </div>
 
       <div id="tab-config" style="z-index: 0;">
-        <textarea id="config">{
+<textarea id="config">
+{
   "source": "__SOURCE__",
   "destination": "__DESTINATION__",
   "access": ["public", "protected", "private"],
@@ -120,12 +150,13 @@ console.log(hello);
   },
   "test": {
     "type": "mocha",
-    "source": "__TEST__",
+    "source": "__TEST__"
   },
   "manual": {
     "usage": ["__MANUAL__"]
   }
-}</textarea>
+}
+</textarea>
       </div>
     </div>
 
@@ -133,11 +164,12 @@ console.log(hello);
   </div>
 
   <div class="output-pane" id="outputPane">
-    <iframe id="viewer"></iframe>
+    <div class="placeholder">Please try it out</div>
+    <iframe id="viewer" style="display: none;"></iframe>
     <code class="error-message" id="outputErrorMessage" style="display: none;"></code>
+    <div class="resizer" title="full size">&lt;</div>
   </div>
 
-  <div class="resizer" title="full size">&lt; &gt;</div>
 </div>
 
 

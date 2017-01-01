@@ -1,7 +1,20 @@
 /**
+ * this is BaseClass.
+ */
+export class BaseClass {
+  /**
+   * this is a method of BaseClass.
+   * @returns {string} a greeting.
+   */
+  baseMethod(){
+    return 'this is base method';
+  }
+}
+
+/**
  * this is MyClass.
  */
-export default class MyClass {
+export default class MyClass extends BaseClass {
   /**
    * creates a instance of MyClass.
    * @param {number} value - initial value.

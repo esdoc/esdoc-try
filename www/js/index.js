@@ -39,6 +39,11 @@ for (const tabButton of Array.from(tabButtons)) {
         tab.style.zIndex = 0;
       }
     }
+
+    const prevActive = document.querySelector('.tab-buttons .active[data-target]');
+    if (prevActive) prevActive.classList.remove('active');
+    const tabButton = ev.target;
+    tabButton.classList.add('active');
   });
 }
 
@@ -69,6 +74,8 @@ tryEl.addEventListener('click', ()=>{
 
   outputPaneEl.classList.add('loading');
   viewerEl.removeAttribute('src');
+  viewerEl.style.display = null;
+  document.querySelector('.placeholder').style.display = 'none';
 
   inputErrorMessageEl.style.display = 'none';
   outputErrorMessageEl.style.display = 'none';
@@ -218,9 +225,9 @@ function buildErrorMessage(code, lineNumber, columnNumber) {
 document.querySelector('.resizer').addEventListener('click', (ev)=>{
   if (inputPaneEl.style.display) {
     inputPaneEl.style.display = null;
-    ev.target.textContent = '< >';
+    ev.target.textContent = '<';
   } else {
     inputPaneEl.style.display = 'none';
-    ev.target.textContent = '> <';
+    ev.target.textContent = '>';
   }
 });

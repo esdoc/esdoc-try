@@ -17,7 +17,7 @@
   },
   "test": {
     "type": "mocha",
-    "source": "__TEST__",
+    "source": "__TEST__"
   },
   "manual": {
     "usage": ["__MANUAL__"]
