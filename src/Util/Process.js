@@ -1,7 +1,7 @@
-import path from 'path';
-import child_process from 'child_process';
+const path = require('path');
+const child_process = require('child_process');
 
-export default class Process {
+class Process {
   static exec(cmd) {
     return new Promise(function(resolve, reject){
       cmd = cmd.replace(/\//g, path.sep);
@@ -11,3 +11,5 @@ export default class Process {
     });
   }
 }
+
+module.exports = Process;

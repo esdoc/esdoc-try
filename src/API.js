@@ -1,7 +1,7 @@
-import co from 'co';
-import fs from 'fs-extra';
-import ESDocGenerator from './ESDocGenerator';
-import Logger from './Util/Logger.js';
+const co = require('co');
+const fs = require('fs-extra');
+const ESDocGenerator = require('./ESDocGenerator');
+const Logger = require('./Util/Logger.js');
 
 const processing = [];
 const MaxProcess = 10;
@@ -55,4 +55,4 @@ function finish(dirFullPath, obj) {
   fs.outputFileSync(`${dirFullPath}/.finish.json`, JSON.stringify(obj, null, 2));
 }
 
-export default new API();
+module.exports = new API();

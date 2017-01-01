@@ -1,10 +1,10 @@
-import Process from './Util/Process.js';
-import fs from 'fs-extra';
-import path from 'path';
-import co from 'co';
-import Logger from './Util/Logger.js';
+const Process = require('./Util/Process.js');
+const fs = require('fs-extra');
+const path = require('path');
+const co = require('co');
+const Logger = require('./Util/Logger.js');
 
-export default class Generator {
+class ESDocGenerator {
   constructor({sourceCode, testCode, manualCode}, destinationDirPath) {
     this._sourceCode = sourceCode;
     this._testCode = testCode;
@@ -127,3 +127,5 @@ export default class Generator {
     fs.copySync('./src/template/MANUAL_INDEX.md', esdocConfig.manual.index);
   }
 }
+
+module.exports = ESDocGenerator;

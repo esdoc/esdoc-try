@@ -1,5 +1,5 @@
-import fs from 'fs';
-import moment from 'moment';
+const fs = require('fs');
+const moment = require('moment');
 
 class Logger {
   write(text) {
@@ -42,4 +42,4 @@ class Logger {
   }
 }
 
-export default new Logger();
+module.exports = new Logger();
