@@ -22,6 +22,11 @@ body {
   background: #57b735;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 textarea {
   height: 100%;
 }
@@ -98,6 +103,13 @@ iframe {
   width: 32px;
 }
 
+.init-button {
+  position: absolute;
+  right: 0;
+  top: 0.7em;
+  font-size: 0.9em;
+}
+
 .CodeMirror {
   height: 100%;
   font-family: Menlo, Consolas, 'Courier New', Courier, Monaco, monospace;
@@ -127,6 +139,7 @@ iframe {
 
 /** tab layout **/
 .tab-buttons {
+  position: relative;
   list-style: none;
   padding: 0 1em;
   margin: 0;
