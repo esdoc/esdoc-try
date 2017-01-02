@@ -76,12 +76,17 @@ class ESDocGenerator {
     userConfig.destination = outputDirPath;
     userConfig.index = `${inputDirPath}/README.md`;
     userConfig.package = `${inputDirPath}/package.json`;
+    userConfig.plugins = null;
+    userConfig.styles = null;
+    userConfig.scripts = null;
 
     if (this._testCode) {
      userConfig.test = {
         type: 'mocha',
         source: testDirPath,
       }
+    } else {
+      userConfig.test = null;
     }
 
     if (this._manualCode) {
@@ -89,6 +94,8 @@ class ESDocGenerator {
         // index: `${manualDirPath}/index.md`,
         usage: [`${manualDirPath}/usage.md`]
       }
+    } else {
+      userConfig.manual = null;
     }
 
     return userConfig;
