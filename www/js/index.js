@@ -1,4 +1,7 @@
-const sessionId = Date.now() + '_' + Math.random().toString().replace('0.', '');
+const d = new Date();
+const date = `${d.getFullYear()}_${d.getMonth() + 1}_${d.getDate()}`;
+const time = `${d.getHours()}_${d.getMinutes()}_${d.getSeconds()}`;
+const sessionId = `${date}_${time}_${d.getTime()}_` + Math.random().toString().replace('0.', '');
 
 function restoreData() {
   const result = {};
