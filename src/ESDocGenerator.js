@@ -76,9 +76,9 @@ class ESDocGenerator {
     userConfig.destination = outputDirPath;
     userConfig.index = `${inputDirPath}/README.md`;
     userConfig.package = `${inputDirPath}/package.json`;
-    userConfig.plugins = null;
-    userConfig.styles = null;
-    userConfig.scripts = null;
+    delete userConfig.plugins;
+    delete userConfig.styles;
+    delete userConfig.scripts;
 
     if (this._testCode) {
      userConfig.test = {
@@ -86,7 +86,7 @@ class ESDocGenerator {
         source: testDirPath,
       }
     } else {
-      userConfig.test = null;
+      delete userConfig.test;
     }
 
     if (this._manualCode) {
@@ -95,7 +95,7 @@ class ESDocGenerator {
         usage: [`${manualDirPath}/usage.md`]
       }
     } else {
-      userConfig.manual = null;
+      delete userConfig.manual;
     }
 
     return userConfig;
