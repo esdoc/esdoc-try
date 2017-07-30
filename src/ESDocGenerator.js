@@ -107,14 +107,14 @@ class ESDocGenerator {
   _writeTestCode(esdocConfig, testCode) {
     if (!testCode) return;
 
-    const filePath = `${esdocConfig.test.source}/indexTest.js`;
+    const filePath = `${esdocConfig.plugins[0].option.test.source}/indexTest.js`;
     fs.outputFileSync(filePath, testCode);
   }
 
   _writeManualCode(esdocConfig, manualCode) {
     if (!manualCode) return;
 
-    const filePath = esdocConfig.manual.usage[0];
+    const filePath = esdocConfig.plugins[0].option.manual.files[0];
     fs.outputFileSync(filePath, manualCode);
 
     // fs.ensureFileSync(esdocConfig.manual.index);
