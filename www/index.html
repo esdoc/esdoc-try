@@ -51,7 +51,7 @@
       <li data-target="tab-index" class="active">Index</li>
       <li data-target="tab-source">Source Code</li>
       <li data-target="tab-test">Test Code</li>
-      <li data-target="tab-manual">Manual(Usage)</li>
+      <li data-target="tab-manual">Manual</li>
       <li data-target="tab-config">Config</li>
       <li class="init-button action-button"><a href="/">init</a></li>
     </ul>
@@ -157,27 +157,14 @@ console.log(hello);
 {
   "source": "__SOURCE__",
   "destination": "__DESTINATION__",
-  "access": ["public", "protected", "private"],
-  "unexportIdentifier": true,
-  "undocumentIdentifier": true,
   "index": "__INDEX__",
-  "experimentalProposal": {
-    "classProperties": true,
-    "objectRestSpread": true,
-    "decorators": true,
-    "doExpressions": true,
-    "functionBind": true,
-    "asyncGenerators": true,
-    "exportExtensions": true,
-    "dynamicImport": true
-  },
-  "test": {
-    "type": "mocha",
-    "source": "__TEST__"
-  },
-  "manual": {
-    "usage": ["__MANUAL__"]
-  }
+  "plugins": [{
+    "name": "esdoc-standard-plugin",
+    "option": {
+      "test": {"source": "__TEST__"},
+      "manual": {"files": ["__MANUAL__"]}
+    }
+  }]
 }
 </textarea>
       </div>

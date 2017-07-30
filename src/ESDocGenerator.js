@@ -76,27 +76,13 @@ class ESDocGenerator {
     userConfig.destination = outputDirPath;
     userConfig.index = `${inputDirPath}/README.md`;
     userConfig.package = `${inputDirPath}/package.json`;
-    delete userConfig.plugins;
-    delete userConfig.styles;
-    delete userConfig.scripts;
+    userConfig.plugins = [{
+      name: 'esdoc-standard-plugin',
+      option: {}
+    }];
 
-    if (this._testCode) {
-     userConfig.test = {
-        type: 'mocha',
-        source: testDirPath,
-      }
-    } else {
-      delete userConfig.test;
-    }
-
-    if (this._manualCode) {
-      userConfig.manual = {
-        // index: `${manualDirPath}/index.md`,
-        usage: [`${manualDirPath}/usage.md`]
-      }
-    } else {
-      delete userConfig.manual;
-    }
+    if (this._testCode) userConfig.plugins[0].option.test = {source: testDirPath};
+    if (this._manualCode) userConfig.plugins[0].option.manual = {files: [`${manualDirPath}/usage.md`]};
 
     return userConfig;
   }
